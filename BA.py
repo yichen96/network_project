@@ -67,9 +67,30 @@ def degree_to_logbin(G):
     return G.degree().values()
 
 
-def av_k(G):
-    arr = np.array(G.degree().values())
+def av_k(degree_data):
+    arr = np.array(degree_data)
     return np.mean(arr)
 
 
+def create_many(N,m,num=100,func=BA):
+    all_val = None
+    all_freq = None
+    all_data = []
+    for i in range(num):
+        G = func(N,m)
+        val, freq = degree_frequency(G)
+        data = degree_to_logbin(G)
+        all_data += data
+
+        if all_val is None:
+            all_val = val
+        else:
+            all_val = np.concatenate((all_val,val))
+
+        if all_freq is None:
+            all_freq = freq
+        else:
+            all_freq = np.concatenate((all_freq,freq))
+
+    return all_data, all_val, all_freq
 
