@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 import random
+import bisect
 
 
 def PRA(N,m):
@@ -72,7 +73,7 @@ def av_k(degree_data):
     return np.mean(arr)
 
 
-def create_many(N,m,num=100,func=BA):
+def create_many(N,m,num=50,func=BA):
     all_val = None
     all_freq = None
     all_data = []
@@ -94,3 +95,24 @@ def create_many(N,m,num=100,func=BA):
 
     return all_data, all_val, all_freq
 
+
+def derivative2nd(x):
+    if type(x) is list:
+        x = np.array(x)
+    k = np.gradient(np.gradient(x,edge_order=2),edge_order=2)
+    return k
+
+
+def turning_pt(c,b, tol=0.4): #get rid of k<70 in the begining too
+    if type(b) is list:
+        b = np.array(b)
+    data = np.log(b)
+    ind_s = bisect.bisect(c,50)
+
+    d = derivative2nd(data[ind_s])
+    diff = np.diff(d)
+    diff = abs(diff)
+    a = diff > tol
+    a = list(a)
+    ind_e = a.index(1) + 1
+    return ind_s, ind_e
