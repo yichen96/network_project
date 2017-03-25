@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import networkx as nx
 import random
@@ -77,10 +78,13 @@ def create_many(N,m,num=50,func=BA):
     all_val = None
     all_freq = None
     all_data = []
+    max_k = []
     for i in range(num):
         G = func(N,m)
         val, freq = degree_frequency(G)
         data = degree_to_logbin(G)
+        k1 = max(val)
+        max_k.append(k1)
         all_data += data
 
         if all_val is None:
@@ -93,26 +97,41 @@ def create_many(N,m,num=50,func=BA):
         else:
             all_freq = np.concatenate((all_freq,freq))
 
-    return all_data, all_val, all_freq
+    return all_data, all_val, all_freq, max_k
 
 
 def derivative2nd(x):
-    if type(x) is list:
-        x = np.array(x)
     k = np.gradient(np.gradient(x,edge_order=2),edge_order=2)
     return k
 
 
-def turning_pt(c,b, tol=0.4): #get rid of k<70 in the begining too
+def turning_pt(c,b, tol=0.4): #get rid of k<20 in the begining too
     if type(b) is list:
         b = np.array(b)
     data = np.log(b)
-    ind_s = bisect.bisect(c,50)
+    ind_s = bisect.bisect(c,20)
 
-    d = derivative2nd(data[ind_s])
+    d = derivative2nd(data[ind_s:])
     diff = np.diff(d)
     diff = abs(diff)
     a = diff > tol
     a = list(a)
-    ind_e = a.index(1) + 1
+    ind_e = a.index(1) + ind_s
     return ind_s, ind_e
+
+
+def BA_kdistr(k,m):
+    return (2*m*(m+1))/(k*(k+1)*(k+2))
+
+
+def PRA_kdistr(k,m):
+    return (m**(k-m))/((m+1)**(k-m+1))
+
+
+def get_k1(func_name,N,m):
+    if func_name == "PRA":
+        return m - (np.log(N)/np.log(m/(m+1)))
+    elif func_name == "BA":
+        return np.sqrt(0.25+N*m*(m+1)) - 0.5
+    else:
+        raise Exception("wrong func name, need to be string")

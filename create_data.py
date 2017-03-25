@@ -1,12 +1,24 @@
 from BA import *
 import pickle
-m_list = [1,2,3,4,5]
-N = int(1e6)
+m_list = [1,2,3,5,10,30]
+N = int(1e5)
 data_dict = {} # {m:all_data, all_val, all_freq}
 
 for m in m_list:
-    all_data, all_val, all_freq = create_many(N, m)
-    data_dict[m] = [all_data, all_val, all_freq]
+    all_data, all_val, all_freq, max_k = create_many(N, m,10)
+    data_dict[m] = [all_data, all_val, all_freq, max_k]
 
-with open("BAdata1time.pickle","w") as f:
-    pickle.dump([data_dict],f)
+with open("NewBAN4m12351030run10.pickle","w") as f:
+    pickle.dump(data_dict,f)
+
+
+N_list = [int(1e2),int(1e3),int(1e4),int(1e5)]
+m = 3
+data_dict = {} # {m:all_data, all_val, all_freq}
+
+for N in N_list:
+    all_data, all_val, all_freq, max_k = create_many(N, m,50)
+    data_dict[m] = [all_data, all_val, all_freq, max_k]
+
+with open("PRAN23456m3run50.pickle","w") as f:
+    pickle.dump(data_dict,f)
