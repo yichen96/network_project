@@ -20,15 +20,12 @@ def RW(N, m,L):  # N number of vertex=time, m number of degree on each vertex
             start = random.randint(0,i-1)
             l = 0
             while l < L:
-                print start
-                print A.neighbors(start)
                 start = np.random.choice(A.neighbors(start))
                 l+=1
             if start not in random_list:
                 random_list.append(start)
                 edge_list.append((i, start))
                 ncounter += 1
-        print edge_list
         if len(edge_list) != m:
             raise Exception("too few edges created")
         A.add_edges_from(edge_list)
