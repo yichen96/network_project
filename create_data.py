@@ -17,8 +17,8 @@ m = 3
 data_dict = {} # {m:all_data, all_val, all_freq}
 
 for N in N_list:
-    all_data, all_val, all_freq, max_k = create_many(N, m,50)
-    data_dict[m] = [all_data, all_val, all_freq, max_k]
+    all_data, all_val, all_freq, max_k = create_many(N, m,20)
+    data_dict[N] = [all_data, all_val, all_freq, max_k]
 
-with open("PRAN23456m3run50.pickle","w") as f:
+with open("FinalBAN2345m3.pickle","w") as f:
     pickle.dump(data_dict,f)
