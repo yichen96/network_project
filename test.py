@@ -3,7 +3,7 @@ import log_bin_CN_2016 as lb
 import matplotlib.pyplot as plt
 import numpy as np
 
-G = BA(int(1e5),3)
+G = RW(int(1e5),3,1)
 # B = BA(int(1e5),3)
 val, freq = degree_frequency(G)
 # val2, freq2 = degree_frequency(B)
